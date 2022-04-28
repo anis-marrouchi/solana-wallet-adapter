@@ -1,6 +1,6 @@
 /* Set min-height to avoid page reflow while session loading */
 .signedInStatus {
-  display: block;
+  display: inline-block;
   min-height: 4rem;
   width: 100%;
 }
@@ -39,7 +39,7 @@
 
 .signedInText {
   padding-top: 0rem;
-  left: 4.6rem;
+  left: 1rem;
 }
 
 .avatar {

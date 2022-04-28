@@ -1,14 +1,33 @@
 import Link from "next/link"
 import { signIn, signOut, useSession } from "next-auth/react"
 import styles from "./header.module.css"
+import {
+  WalletMultiButton,
+// } from './wallet/WalletMultiButton';
+} from '@solana/wallet-adapter-material-ui';
 
+import { useWallet } from "@solana/wallet-adapter-react";
+import { MouseEventHandler, useCallback, useEffect, useMemo } from "react";
+import { PublicKey, PublicKeyInitData } from "@solana/web3.js";
 // The approach used in this component shows how to build a sign in and sign out
 // component that works on pages which support both client and server side
 // rendering, and avoids any flash incorrect content on initial page load.
 export default function Header() {
   const { data: session, status } = useSession()
   const loading = status === "loading"
-
+  const { publicKey, wallet, connect, connecting, disconnect } = useWallet();
+ 
+  const onConnect: MouseEventHandler<HTMLButtonElement> = useCallback(
+      (event) => {
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          if (!event.defaultPrevented)
+              connect().catch(() => {
+                  // Silently catch because any errors are caught by the context `onError` handler
+              });
+      },
+      [connect]
+  );
+  
   return (
     <header>
       <noscript>
@@ -39,16 +58,10 @@ export default function Header() {
           )}
           {session?.user && (
             <>
-              {session.user.image && (
-                <span
-                  style={{ backgroundImage: `url('${session.user.image}')` }}
-                  className={styles.avatar}
-                />
-              )}
               <span className={styles.signedInText}>
-                <small>Signed in as</small>
-                <br />
-                <strong>{session.user.email ?? session.user.name}</strong>
+                <small>Hello </small>
+                <strong>{session.user.name ?? session.user.email}</strong>
+              <WalletMultiButton style={{marginLeft: '12px'}} />
               </span>
               <a
                 href={`/api/auth/signout`}
@@ -71,36 +84,11 @@ export default function Header() {
               <a>Home</a>
             </Link>
           </li>
-          <li className={styles.navItem}>
-            <Link href="/client">
-              <a>Client</a>
+          {session?.user &&<li className={styles.navItem}>
+            <Link href="/profile">
+              <a>NFTs</a>
             </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/server">
-              <a>Server</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/protected">
-              <a>Protected</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/api-example">
-              <a>API</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/admin">
-              <a>Admin</a>
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link href="/me">
-              <a>Me</a>
-            </Link>
-          </li>
+          </li>}
         </ul>
       </nav>
     </header>
