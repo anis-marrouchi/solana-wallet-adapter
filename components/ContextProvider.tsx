@@ -98,13 +98,11 @@ export const ContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
-                <>
                 <SnackbarProvider>
                     <AutoConnectProvider>
                         <WalletContextProvider>{children}</WalletContextProvider>
                     </AutoConnectProvider>
                 </SnackbarProvider>
-                </>
             </ThemeProvider>
         </StyledEngineProvider>
     );
