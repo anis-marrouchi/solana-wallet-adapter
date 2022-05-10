@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const { data: session, status } = useSession()
   const loading = status === "loading"
   const [content, setContent] = useState()
-  const [nfts, setNfts] = useState([])
+  const [nfts, setNfts] = useState<any[]>([])
   const { publicKey, wallet, connect, connecting, disconnect } = useWallet();
   const base58 = useMemo(() => publicKey?.toBase58(), [publicKey]);
     const walletContent = useMemo(() => {
